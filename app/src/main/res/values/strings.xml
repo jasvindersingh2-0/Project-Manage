@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">ProjectManage</string>
+    <string name="intro">Collaborate and Plan together across multiple devices on Projemanag\'s Minimalistic Interface</string>
+    <string name="instruction_signUp">Enter Your Name, Email and Password to Register with us</string>
+    <string name="pleaseWait">Please wait&#8230;</string>
+    <string name="pleaseClickAgainToExit">Please click back again to exit</string>
+    <string name="signingIn">We are signing you in</string>
+
+    <string name="nav_my_profile">My Profile</string>
+    <string name="nav_sign_out">Sign Out</string>
+    <string name="image_contentDescription">image</string>
+    <string name="mobile">mobile</string>
+    <string name="email">email</string>
+    <string name="name">name</string>
+    <string name="my_profile">My Profile</string>
+    <string name="updating_data">Updating Data..</string>
+
+    <string name="board_name">Board Name</string>
+    <string name="create">CREATE</string>
+    <string name="create_board_title">Board Title</string>
+    <string name="creating_board">Creating new Task</string>
+
+</resources>
