@@ -49,7 +49,7 @@ class FirestoreClass {
             }
 
     }
-    fun loadUserData(activity: Activity){
+    fun loadUserData(activity: Activity,readBoardsList : Boolean = false){
         mFireStoreInstance.collection(Constants.USERS)
             .document(getCurrentUserId()).get()
             .addOnSuccessListener { document->
@@ -59,7 +59,7 @@ class FirestoreClass {
                         activity.signInSuccess(loggedInUser!!)
                     }
                     is MainActivity->{
-                        activity.updateUserNavigationDetails(loggedInUser!!)
+                        activity.updateUserNavigationDetails(loggedInUser!!,readBoardsList)
                     }
                     is ProfileActivity->{
                         activity.setUserDataInUI(loggedInUser!!)
@@ -97,6 +97,26 @@ class FirestoreClass {
             currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
         }
         return currentUserId
+    }
+    fun getBoardsList(activity:MainActivity){
+        mFireStoreInstance.collection(Constants.BOARDS)
+            .whereArrayContains(Constants.ASSIGNED_TO,getCurrentUserId())
+            .get()
+            .addOnSuccessListener {
+                document->
+                Log.i(activity.javaClass.simpleName,document.documents.toString())
+                val boardList : ArrayList<Board> = ArrayList()
+                for(i in document.documents){
+                    val board = i.toObject(Board::class.java)!!
+                    board.documentId = i.id
+                    boardList.add(board)
+                }
+                activity.populateBoarsListOnUi(boardList)
+            }.addOnFailureListener { e->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName,"Error while Creating the Board")
+
+            }
     }
     fun updateUserProfileData(activity: ProfileActivity
                               ,userHashMap : HashMap<String,Any>){

@@ -15,6 +15,7 @@ object Constants {
     const val IMAGE : String = "image"
     const val NAME : String = "name"
     const val BOARDS : String = "boards"
+    const val ASSIGNED_TO : String = "assignedTo"
     fun showImageChooser(pickImageLauncher : ActivityResultLauncher<Intent>) {
         val galleryIntent = Intent(
             Intent.ACTION_PICK,

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/selectableItemBackground"
+    android:layout_marginBottom="@dimen/item_board_content_marginBottom">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_board_image"
+        android:layout_width="@dimen/item_board_image_size"
+        android:layout_height="@dimen/item_board_image_size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_board_place_holder"
+        app:civ_border_color="@color/PrimaryTextColor"
+        app:civ_border_width="@dimen/item_board_image_circular_border_width"/>
+    <TextView
+        android:id="@+id/tv_item_board_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/iv_board_image"
+        tools:text="Name"
+        android:padding="8dp"
+        android:textSize="@dimen/item_board_name_text_size"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="@+id/iv_board_image"/>
+    <TextView
+        android:id="@+id/tv_creator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/iv_board_image"
+        tools:text="Created By"
+        android:padding="8dp"
+        android:textSize="@dimen/item_board_created_by_text_size"
+
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_board_name"
+        app:layout_constraintBottom_toBottomOf="@id/iv_board_image"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

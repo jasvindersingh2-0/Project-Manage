@@ -131,7 +131,7 @@ class CreateBoardActivity : BaseActivity() {
             binding.etCreateBoard.text.toString(),
             mBoardImageUrl,
             mUserName,
-            assignedUserArrayList
+            assignedUserArrayList,
         )
         FirestoreClass().createBoard(this@CreateBoardActivity,board)
     }

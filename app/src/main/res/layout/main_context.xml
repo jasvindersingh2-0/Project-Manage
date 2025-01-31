@@ -4,15 +4,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".activities.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:background="@drawable/ic_background"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+       app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="@dimen/cardview_default_elevation"
+        app:cardCornerRadius="@dimen/cardview_corner_radius">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_board_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:visibility="gone">
+
+        </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:id="@+id/tv_no_board_available"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Hello World!"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:gravity="center"
+            android:textColor="@color/SecondaryTextColor"
+            android:textSize="@dimen/no_boards_available_text_size"/>
+
+    </androidx.cardview.widget.CardView>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

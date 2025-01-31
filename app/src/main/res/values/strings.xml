@@ -20,4 +20,6 @@
     <string name="create_board_title">Board Title</string>
     <string name="creating_board">Creating new Task</string>
 
+    <string name="no_board_available">No Boards are Available!!</string>
+
 </resources>

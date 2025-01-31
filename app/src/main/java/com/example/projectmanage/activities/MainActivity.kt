@@ -6,17 +6,22 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.cloudinary.android.MediaManager
 import com.cloudinary.android.callback.UploadCallback
 import com.example.projectmanage.R
+import com.example.projectmanage.activities.adaptors.BoardItemAdaptor
 import com.example.projectmanage.activities.firebase.FirestoreClass
+import com.example.projectmanage.activities.models.Board
 import com.example.projectmanage.databinding.ActivityMainBinding
 import com.example.projectmanage.databinding.AppBarMainBinding
+import com.example.projectmanage.databinding.MainContextBinding
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import models.User
@@ -33,6 +38,9 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
     private val bindingTwo by lazy {
         AppBarMainBinding.inflate(layoutInflater)
     }
+    private val bindingThree by lazy{
+        MainContextBinding.inflate(layoutInflater)
+    }
     private lateinit var mUserName:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +51,8 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         setContentView(bindingOne.root)
         bindingOne.drawerLayout.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
         bindingOne.mainContent.addView(bindingTwo.root)
-        FirestoreClass().loadUserData(this)
+        bindingOne.mainContent.addView(bindingThree.root)
+        FirestoreClass().loadUserData(this,true)
         setUpActionBar()
         bindingOne.fabCreateBoard.setOnClickListener {
             val intent = Intent(this,CreateBoardActivity::class.java)
@@ -53,7 +62,21 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
         bindingOne.navView.setNavigationItemSelectedListener(this)
     }
-
+    fun populateBoarsListOnUi(boardsList: ArrayList<Board>){
+        hideProgressDialog()
+        if(boardsList.size>0){
+            bindingThree.rvBoardList.visibility = View.VISIBLE
+            bindingThree.tvNoBoardAvailable.visibility = View.GONE
+            bindingThree.rvBoardList.layoutManager = LinearLayoutManager(this)
+            bindingThree.rvBoardList.hasFixedSize()
+            val adaptor = BoardItemAdaptor(this,boardsList)
+            bindingThree.rvBoardList.adapter = adaptor
+        }
+        else{
+            bindingThree.rvBoardList.visibility = View.GONE
+            bindingThree.tvNoBoardAvailable.visibility = View.VISIBLE
+        }
+    }
     private fun setUpActionBar(){
         setSupportActionBar(bindingTwo.tbMainActivity)
         bindingTwo.tbMainActivity.setNavigationIcon(R.drawable.ic_action_navigation_menu)
@@ -82,7 +105,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         }
 
     }
-    fun updateUserNavigationDetails(user: User){
+    fun updateUserNavigationDetails(user: User,readBoardsLst : Boolean){
         val headerView = bindingOne.navView.getHeaderView(0)
         mUserName = user.name
         Glide
@@ -92,6 +115,11 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
             .placeholder(R.drawable.ic_user_place_holder)
             .into(headerView.findViewById(R.id.nav_user_image))
         headerView.findViewById<TextView>(R.id.tv_username).text = user.name
+
+        if(readBoardsLst){
+            showProgressDialog(resources.getString(R.string.pleaseWait))
+            FirestoreClass().getBoardsList(this)
+        }
 
     }
 
