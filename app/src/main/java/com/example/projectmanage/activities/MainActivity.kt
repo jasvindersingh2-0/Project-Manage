@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -28,8 +30,10 @@ import models.User
 import utils.Constants
 
 class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListener {
+    private lateinit var launcher : ActivityResultLauncher<Intent>
     companion object{
-        private const val MY_PROFILE_REQUEST_CODE : Int = 11
+        const val MY_PROFILE_REQUEST_CODE : Int = 11
+        const val CREATE_BOARD_REQUEST_CODE : Int = 12
     }
     // In this Activity we bind two layout to Single Activity Below
     private val bindingOne by lazy {
@@ -42,12 +46,35 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         MainContextBinding.inflate(layoutInflater)
     }
     private lateinit var mUserName:String
-
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         initCloudinary()
 //        setContentView(bindingOne.root)
 //        bindingOne.root.addView(bindingTwo.root)
+        launcher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ){
+            result->
+            Log.d("ActivityResult", "Launcher triggered, resultCode: ${result.resultCode}")
+            if(result.resultCode == Activity.RESULT_OK ){
+                val data:Intent? = result.data
+                val requestCodeForBoard = data?.getIntExtra(Constants.BOARD_REQUEST_CODE,-1)
+                val requestCodeForProfile = data?.getIntExtra(Constants.PROFILE_REQUEST_CODE,-1)
+                Log.d("ActivityResult", "Received requestCodeForProfile: $requestCodeForProfile")
+                if(requestCodeForBoard == CREATE_BOARD_REQUEST_CODE){
+                    FirestoreClass().getBoardsList(this@MainActivity)
+                    Log.d("ActivityResult", "Updating user data after profile update")
+                    Toast.makeText(this,"Result Launcher Worked",
+                        Toast.LENGTH_SHORT).show()
+                }
+                if(requestCodeForProfile == MY_PROFILE_REQUEST_CODE){
+//                    Toast.makeText(this,"Got result for Main",Toast.LENGTH_SHORT).show()
+                    FirestoreClass().loadUserData(this@MainActivity)
+                }
+
+            }
+        }
         setContentView(bindingOne.root)
         bindingOne.drawerLayout.descendantFocusability = ViewGroup.FOCUS_BLOCK_DESCENDANTS
         bindingOne.mainContent.addView(bindingTwo.root)
@@ -57,7 +84,9 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         bindingOne.fabCreateBoard.setOnClickListener {
             val intent = Intent(this,CreateBoardActivity::class.java)
             intent.putExtra(Constants.NAME,mUserName)
-            startActivity(intent)
+            intent.putExtra(Constants.BOARD_REQUEST_CODE, CREATE_BOARD_REQUEST_CODE)
+//            startActivityForResult(intent, CREATE_BOARD_REQUEST_CODE)
+            launcher.launch(intent)
         }
 
         bindingOne.navView.setNavigationItemSelectedListener(this)
@@ -123,26 +152,32 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
     }
 
-    override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        data: Intent?,
-        caller: ComponentCaller
-    ) {
-        super.onActivityResult(requestCode, resultCode, data, caller)
-        if(requestCode == Activity.RESULT_OK && resultCode == MY_PROFILE_REQUEST_CODE){
-            Toast.makeText(this,"Got result for Main",Toast.LENGTH_SHORT).show()
-            FirestoreClass().loadUserData(this)
-        }
-        else{
-            Log.e("Cancelled","Cancelled")
-        }
-    }
+//    override fun onActivityResult(
+//        requestCode: Int,
+//        resultCode: Int,
+//        data: Intent?,
+//        caller: ComponentCaller
+//    ) {
+//        super.onActivityResult(requestCode, resultCode, data, caller)
+//        if(resultCode == Activity.RESULT_OK &&
+//            requestCode == MY_PROFILE_REQUEST_CODE){
+//            Toast.makeText(this,"Got result for Main",Toast.LENGTH_SHORT).show()
+//            FirestoreClass().loadUserData(this@MainActivity)
+//        }
+//        else if(resultCode == Activity.RESULT_OK &&
+//            requestCode == CREATE_BOARD_REQUEST_CODE){
+//            FirestoreClass().getBoardsList(this@MainActivity)
+//        }
+//        else{
+//            Log.e("Cancelled","Cancelled")
+//        }
+//    }
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.nav_my_profile->{
-                startActivityForResult(Intent(this,ProfileActivity::class.java),
-                    MY_PROFILE_REQUEST_CODE)
+                val intent = Intent(this@MainActivity,ProfileActivity::class.java)
+                intent.putExtra(Constants.PROFILE_REQUEST_CODE, MY_PROFILE_REQUEST_CODE)
+                launcher.launch(intent)
             }
             R.id.nav_sign_out->{
                 FirebaseAuth.getInstance().signOut()

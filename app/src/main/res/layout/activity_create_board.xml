@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/PopupOverlay"
         />
-    <com.google.android.material.transformation.TransformationChildCard
+    <androidx.cardview.widget.CardView
         android:id="@+id/cd_board"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,6 +55,6 @@
                 android:padding="8dp"
                 android:text="Update"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.transformation.TransformationChildCard>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

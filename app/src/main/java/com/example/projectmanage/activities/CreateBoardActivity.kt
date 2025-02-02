@@ -1,6 +1,7 @@
 package com.example.projectmanage.activities
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
@@ -137,6 +138,12 @@ class CreateBoardActivity : BaseActivity() {
     }
 
     fun boardCreatedSuccessfully(){
+//        setResult(Activity.RESULT_OK)
+        val resultIntent = Intent()
+        resultIntent.putExtra(Constants.BOARD_REQUEST_CODE, MainActivity.CREATE_BOARD_REQUEST_CODE)
+        setResult(Activity.RESULT_OK, resultIntent)
+        Toast.makeText(this,"Provided Update code for reloading data in main",
+            Toast.LENGTH_SHORT).show()
         hideProgressDialog()
         finish()
     }

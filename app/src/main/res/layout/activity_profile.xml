@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/PopupOverlay"/>
 
-    <com.google.android.material.transformation.TransformationChildCard
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_profile_activity"
         app:layout_constraintTop_toBottomOf="@id/tb_profile_activity"
         android:layout_width="match_parent"
@@ -91,8 +91,7 @@
                 android:padding="8dp"
                 android:text="Update"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.transformation.TransformationChildCard>
-
+    </androidx.cardview.widget.CardView>
 
 
 

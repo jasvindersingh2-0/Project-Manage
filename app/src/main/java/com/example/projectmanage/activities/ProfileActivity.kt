@@ -205,7 +205,11 @@ class ProfileActivity : BaseActivity() {
 //        }
     fun profileUpdateSuccess(){
         hideProgressDialog()
-        setResult(Activity.RESULT_OK)
+//        setResult(Activity.RESULT_OK)
+        val resultIntent = Intent()
+        resultIntent.putExtra(Constants.PROFILE_REQUEST_CODE,
+            MainActivity.MY_PROFILE_REQUEST_CODE)
+        setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
     fun updateUserProfileData(){
