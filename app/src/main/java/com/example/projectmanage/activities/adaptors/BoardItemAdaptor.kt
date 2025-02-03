@@ -1,13 +1,16 @@
 package com.example.projectmanage.activities.adaptors
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.projectmanage.R
+import com.example.projectmanage.activities.TaskListActivity
 import com.example.projectmanage.activities.models.Board
 import com.example.projectmanage.databinding.ItemBoardBinding
+import utils.Constants
 
 open class BoardItemAdaptor(private val context: Context,
     private var list:ArrayList<Board>):
@@ -17,9 +20,11 @@ open class BoardItemAdaptor(private val context: Context,
         val name = binding.tvItemBoardName
         val createdBy = binding.tvCreator
         val boardImage = binding.ivBoardImage
-        fun bindData(id : Board){
+        fun bindData(model : Board){
             binding.root.setOnClickListener {
-
+                val intent = Intent(it.context,TaskListActivity::class.java)
+                intent.putExtra(Constants.DOCUMENT_ID,model.documentId)
+                it.context.startActivity(intent)
             }
         }
     }

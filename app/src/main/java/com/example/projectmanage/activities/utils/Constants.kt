@@ -18,6 +18,7 @@ object Constants {
     const val ASSIGNED_TO : String = "assignedTo"
     const val BOARD_REQUEST_CODE : String = "boardRequestCode"
     const val PROFILE_REQUEST_CODE : String = "profileRequestCode"
+    const val DOCUMENT_ID : String = "documentID"
     fun showImageChooser(pickImageLauncher : ActivityResultLauncher<Intent>) {
         val galleryIntent = Intent(
             Intent.ACTION_PICK,

@@ -22,4 +22,7 @@
 
     <string name="no_board_available">No Boards are Available!!</string>
 
+
+    <string name="title_TaskListActivity">Task List</string>
+
 </resources>
